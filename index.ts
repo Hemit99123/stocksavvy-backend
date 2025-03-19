@@ -44,7 +44,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true, // So only a server is able to access the cookie within request headers (no JS scripts)
+      httpOnly: process.env.NODE_ENV === "production", // So only a server is able to access the cookie within request headers (no JS scripts)
       secure: true, // Set to true in production
       maxAge: 1000 * 60 * 60 * 24 * 365 * 7,
     },
