@@ -9,6 +9,9 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+# Install some other things needed for Husky to work (git)
+RUN apt-get update && apt-get install -y git && npm install
+
 # Copy the rest of the project files
 COPY . .
 
