@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.ts",
+    "start": "node --experimental-transform-types index.ts",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
     "prepare": "husky install",
