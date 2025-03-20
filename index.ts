@@ -50,7 +50,7 @@ app.use(
       secure: process.env.NODE_ENV === "production", // Set to true in production
       maxAge: 1000 * 60 * 60 * 24 * 365 * 7,
       sameSite: "none",
-      domain: "stocksavvy-backend.onrender.com"
+      domain: "stocksavvy-backend.onrender.com",
     },
   })
 );

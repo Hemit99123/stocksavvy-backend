@@ -150,7 +150,7 @@ const router = express.Router();
 router.post("/login/email-magic", authController.loginEmail)
 router.post("/assign-otp", authController.assignOtp)
 router.get("/logout", authController.logout);
-router.delete("/delete", authController.deleteUser)
+router.delete("/delete", authController.deleteUser);
 router.get("/check-session", authController.checkSession);
-router.get("/get-session", authController.getInfoSession)
+router.get("/get-session", authController.getInfoSession);
 export default router;
