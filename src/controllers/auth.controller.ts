@@ -160,7 +160,8 @@ const authController = {
 
   getInfoSession: (req: Request, res: Response) => {
     try {
-      res.json({session: req.session.user})
+      const auth = req.session.user ? true : false;
+      res.json({session: req.session.user, auth: auth})
     } catch (error) {
       handleError(res, error)
     }
