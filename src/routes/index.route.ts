@@ -1,6 +1,5 @@
 import express from "express";
 import indexController from "../controllers/index.controller.ts";
-import { authenticateSession } from "../middleware/session.middleware.ts";
 const router = express.Router();
 
 /**
@@ -30,6 +29,6 @@ const router = express.Router();
  *                   example: The backend that powers the StockSavvy educational platform
  */
 
-router.get("/", authenticateSession, indexController.get);
+router.get("/", indexController.get);
 
 export default router;
