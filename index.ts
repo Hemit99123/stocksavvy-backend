@@ -34,6 +34,8 @@ app.use(
   }),
 );
 
+app.set('trust proxy', 1);
+
 // Session middleware (config for session and its cookie)
 app.use(
   session({
@@ -47,7 +49,8 @@ app.use(
       httpOnly: true, // So only a server is able to access the cookie within request headers (no JS scripts)
       secure: process.env.NODE_ENV === "production", // Set to true in production
       maxAge: 1000 * 60 * 60 * 24 * 365 * 7,
-      sameSite: "none"
+      sameSite: "none",
+      domain: "stocksavvy-backend.onrender.com"
     },
   })
 );
