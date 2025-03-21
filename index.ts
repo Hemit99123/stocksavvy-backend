@@ -50,7 +50,7 @@ app.use(
       secure: process.env.NODE_ENV === "production", // Set to true in production
       maxAge: 1000 * 60 * 60 * 24 * 365 * 7,
       sameSite: "none",
-      domain: process.env.DOMAIN,
+      domain: process.env.DOMAIN  // the domain should not have http:// or https://,
     },
   })
 );
