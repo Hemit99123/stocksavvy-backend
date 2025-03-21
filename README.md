@@ -33,9 +33,6 @@ Swagger is used for seamless API documentation.
 ### - Husky + ESLint
 These are dev tools that make the code maintainable and production ready. ESLint is a linting software that ensures code follows a strict set of rules designed for longevity and production readiness. Both **ESLint** and **Husky** are configured to run automatically before each commit to the GitHub remote repository.
 
-### - Github Actions + Jest
-A GitHub action that runs Jest testing, which tests **all** helper functions that the backend system uses. This action runs Jest after commits are pushed onto the repo.
-
 ## 🧱 API Architecture:
 
 The API logic is structured into three main folders. It is modelled after the MVC architecture. The "models" are taken care of by the `/drizzle` folder and the `schema.ts` file within `src`.
