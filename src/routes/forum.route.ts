@@ -119,12 +119,9 @@ const router = express.Router();
  *         description: An unexpected error occurred
  */
 
-// authenticated routes
 router.post("/create", authenticateSession, forumController.create);
 router.delete("/delete", authenticateSession, forumController.delete);
-
-// unauthenticated routes
-router.get("/all-questions", forumController.getAllQuestions);
-router.get("/user-questions", forumController.getAllUserQuestions);
+router.get("/all-questions", authenticateSession, forumController.getAllQuestions);
+router.get("/user-questions", authenticateSession, forumController.getAllUserQuestions);
 
 export default router;
