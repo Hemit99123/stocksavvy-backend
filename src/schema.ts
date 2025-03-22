@@ -1,4 +1,4 @@
-import { text, pgTable, serial, jsonb } from "drizzle-orm/pg-core";
+import { text, pgTable, serial, jsonb, integer } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   email: text("email").primaryKey(),
@@ -11,10 +11,21 @@ export const forum = pgTable("forum", {
   id: serial("id").primaryKey(),
   question: text("question").notNull(),
   email: text("email")
-    .references(() => user.email) // references the email in the user table (foreign key)
+    .references(() => user.email) 
     .notNull(),
+  content: text("content").notNull()
 });
 
+export const comment = pgTable("comment", {
+  id: serial("id").primaryKey(),
+  content: text("content").notNull(),
+  forumID: integer("forumID")
+    .references(() => forum.id)
+    .notNull(),
+  email: text("email")
+    .references(() => user.email)
+    .notNull()
+})
 
 export const question = pgTable("question", {
   id: serial("id").primaryKey(),

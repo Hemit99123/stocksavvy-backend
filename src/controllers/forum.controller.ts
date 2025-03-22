@@ -1,12 +1,12 @@
 import type { Request, Response } from "express";
 import handleError from "../utils/error/handleError.ts";
-import { forum } from "../schema.ts";
+import { comment, forum } from "../schema.ts";
 import { db } from "../utils/db/index.ts";
 import { eq } from "drizzle-orm";
 
-const forumController = {
-    create: async (req: Request, res: Response) => {
-        const { question } = req.body;
+export const forumController = {
+    createQuestion: async (req: Request, res: Response) => {
+        const { question, content } = req.body;
         const email = req.session.user?.email;
 
         if (!question || !email) {
@@ -22,6 +22,7 @@ const forumController = {
                 .values({
                     question,
                     email,
+                    content
                 });
 
             res.status(201).json({
@@ -32,7 +33,7 @@ const forumController = {
         }
     },
 
-    delete: async (req: Request, res: Response) => {
+    deleteQuestion: async (req: Request, res: Response) => {
         const { id } = req.body;
         const email = req.session.user?.email;
 
@@ -69,7 +70,7 @@ const forumController = {
     },
 
     getAllUserQuestions: async (req: Request, res: Response) => {
-        const { email } = req.query
+        const { email } = req.query;
 
         try {
             const questions = await db
@@ -81,10 +82,83 @@ const forumController = {
                 questions,
                 message: "Got all questions for user"
             })
-        } catch(error: unknown) {
+        } catch(error) {
             handleError(res,error)
+        }
+    },
+    getOnePost: async (req: Request, res: Response) => {
+        const { id } = req.query;
+
+        try {
+            const questions = await db
+                .select()
+                .from(forum)
+                .where(eq(forum.id, Number(id)))
+            
+            res.status(200).json({
+                question: questions[0],
+                message: "Got question based off id"
+            })
+                
+        } catch(error) {
+            handleError(res, error)
         }
     }
 };
 
-export default forumController;
+export const forumCommentController = {
+    createComment: async (req: Request, res: Response) => {
+        const { forumID, content } = req.body;
+        const email = req.session.user?.email;
+
+        try {
+            await db
+                .insert(comment)
+                .values({
+                    forumID,
+                    content,
+                    email
+                })
+        } catch(error) {
+            handleError(res, error)
+        }
+    },
+
+    deleteQuestion: async (req: Request, res: Response) => {
+        const { id } = req.body;
+        const email = req.session.user?.email;
+
+        try {
+
+            // delete a document 
+            await db
+                .delete(comment)
+                .where(eq(comment.email, email) && eq(comment.id, id)); 
+            
+            res.status(200).json({
+                message: "Deleted your comment successfully"
+            })
+            
+        } catch(error) {
+            handleError(res,error)
+        }
+    },
+
+    getForumComments: async (req: Request, res: Response) => {
+        const { id } = req.query;
+
+        try {
+            const comments = await db 
+                .select()
+                .from(comment)
+                .where(eq(comment.forumID, Number(id)))
+            
+            res.status(200).json({
+                comments
+            })
+
+        } catch(error: unknown) {
+            handleError(res,error)
+        }
+    },
+}
