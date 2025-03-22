@@ -21,8 +21,8 @@ export const comment = pgTable("comment", {
   content: text("content").notNull(),
 
   // foreign keys to properly associate comment w/ owner + post
-  
-  forumID: integer("forumID")
+
+  forumID: integer("forumid")
     .references(() => forum.id)
     .notNull(),
   email: text("email")
