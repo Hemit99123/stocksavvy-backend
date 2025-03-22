@@ -124,33 +124,10 @@ const router = express.Router();
  *                    example: no-auth-access
  */
 
-/**
- * @swagger
- *  /auth/check-session:
- *    get:
- *      summary: Checking session for client-side
- *      tags: [authentication]
- *      responses:
- *        200:
- *          description: User authenticated successfully
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  success:
- *                    type: boolean
- *                    example: true
- *        500:
- *          description: An error occurred
- *        401:
- *          description: User is NOT authenticated
- */
 
 router.post("/login/email-magic", authController.loginEmail)
 router.post("/assign-otp", authController.assignOtp)
 router.get("/logout", authController.logout);
 router.delete("/delete", authController.deleteUser);
-router.get("/check-session", authController.checkSession);
 router.get("/get-session", authController.getInfoSession);
 export default router;
