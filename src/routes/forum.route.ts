@@ -14,6 +14,6 @@ router.get("/get", authenticateSession, forumController.getOnePost)
 // all comments related routes
 router.post("/create-comment", authenticateSession, forumCommentController.createComment)
 router.delete("/delete-comment", authenticateSession, forumCommentController.deleteQuestion)
-router.get("/get", authenticateSession, forumCommentController.getForumComments)
+router.get("/get-comments", authenticateSession, forumCommentController.getForumComments)
 
 export default router;
