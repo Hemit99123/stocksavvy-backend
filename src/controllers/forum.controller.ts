@@ -65,6 +65,10 @@ export const forumController = {
             await db.update(forum)
                 .set({ content,question })
                 .where(and(eq(forum.id, id), eq(forum.email, email)));
+            
+            res.status(200).json({
+                message: "Updated forum"
+            })
         } catch (error: unknown) {
             handleError(res, error);
         }
