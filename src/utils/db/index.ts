@@ -7,7 +7,7 @@ dotenv.config();
 // Since pg may still support module.exports syntax
 const { Pool } = pkg;
 
-import * as schema from "../../schema.ts";
+import * as schema from "../../models/schema.ts";
 
 // Using pg's connection pooling so the API does not have to keep creating new connections to the db instance (adds to performance)
 

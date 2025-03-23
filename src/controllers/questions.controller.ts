@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { question } from "../schema.ts";
+import { question } from "../models/schema.ts";
 import { db } from "../utils/db/index.ts";
 import handleError from "../utils/error/handleError.ts";
 import { eq, sql } from "drizzle-orm";
