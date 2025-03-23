@@ -24,7 +24,7 @@ export const bookmarkController = {
             handleError(error, res)
         }
     },
-    
+
     deleteBookmark: async (req: Request, res: Response) => {
         const {id} = req.query;
         const email = req.session.user.email;
@@ -40,5 +40,23 @@ export const bookmarkController = {
         } catch(error) {
             handleError(error, res)
         }
-    } 
+    },
+
+    getUserBookmark: async (req: Request, res: Response) => {
+        const email = req.session.user.email;
+
+        try {
+            const userBookmark = await db
+                .select()
+                .from(bookmark)
+                .where(eq(bookmark.email,email))
+
+            res.status(200).json({
+                bookmark: userBookmark,
+                message: "Retrieved all bookmarks for your user"
+            })
+        } catch(error) {
+            handleError(error, res)
+        }
+    }
 }
