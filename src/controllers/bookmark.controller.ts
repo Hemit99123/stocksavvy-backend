@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import handleError from "../utils/error/handleError.ts";
-import { bookmark, comment, forum } from "../models/schema.ts";
+import { bookmark } from "../models/schema.ts";
 import { db } from "../utils/db/index.ts";
 import { eq, and } from "drizzle-orm";
 
