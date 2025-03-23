@@ -6,6 +6,7 @@ const router = express.Router();
 
 // all forum related routes
 router.post("/create", authenticateSession, forumController.createQuestion);
+router.put("/update", authenticateSession, forumController.updateQuestion)
 router.delete("/delete", authenticateSession, forumController.deleteQuestion);
 router.get("/all-questions", authenticateSession, forumController.getAllQuestions);
 router.get("/user-questions", authenticateSession, forumController.getAllUserQuestions);

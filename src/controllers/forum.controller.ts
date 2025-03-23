@@ -57,6 +57,20 @@ export const forumController = {
         }
     },
 
+    updateQuestion: async (req: Request, res: Response) => {
+        const { id, question, content } = req.body;
+        const email = req.session.user?.email;
+    
+        try {
+            await db.update(forum)
+                .set({ content,question })
+                .where(and(eq(forum.id, id), eq(forum.email, email)));
+        } catch (error: unknown) {
+            handleError(res, error);
+        }
+    },
+    
+
     getAllQuestions: async (req: Request, res: Response) => {
         try {
             const questions = await db 
