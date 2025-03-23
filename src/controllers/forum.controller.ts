@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import handleError from "../utils/error/handleError.ts";
 import { comment, forum } from "../schema.ts";
 import { db } from "../utils/db/index.ts";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export const forumController = {
     createQuestion: async (req: Request, res: Response) => {
@@ -70,7 +70,7 @@ export const forumController = {
     },
 
     getAllUserQuestions: async (req: Request, res: Response) => {
-        const { email } = req.query;
+        const email = req.session.user.email;
 
         try {
             const questions = await db
@@ -128,23 +128,23 @@ export const forumCommentController = {
         }
     },
 
+
     deleteQuestion: async (req: Request, res: Response) => {
         const { id } = req.body;
         const email = req.session.user?.email;
-
+    
         try {
-
-            // delete a document 
+            // Delete comment where id matches and belongs to the user
             await db
                 .delete(comment)
-                .where(eq(comment.email, email) && eq(comment.id, id)); 
+                .where(and(eq(comment.email, email), eq(comment.id, id))); 
             
             res.status(200).json({
                 message: "Deleted your comment successfully"
-            })
+            });
             
-        } catch(error) {
-            handleError(res,error)
+        } catch (error) {
+            handleError(res, error);
         }
     },
 
