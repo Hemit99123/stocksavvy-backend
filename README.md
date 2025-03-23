@@ -65,17 +65,19 @@ Contributions are allowed! We ask that you follow certain rules whilst making co
 
 #### The rules:
 
-When making contributions to this codebase, start by creating an issue. The naming of the issue should start off with:
+First, create a development branch for your work. **DO NOT COMMIT ON MAIN** 
+The branch should have the following naming structure: `YOUR NAME/GITHUB USER/1-2 WORDS ON THE CONTRIBUTION MADE` Examples of such naming structure include `hemit99123/about-page`
+
+Now create a PR (pull request) to merge that development branch to the main branch. The naming of the PR should start off with:
 
 - feat: (for a new feature)
 - fix: (for a fix to a bug/feature not working)
 - chore: (for any other task that does not fit the other 2 categories)
+  
+**Add all comments into the PR itself.** We will *not* accept any PRs without some sort of documentation/record of changes. Previously, all documentation was kept on issues. Therefore, if you want to look at a PR dated prior to Sunday, March 23rd, 2025 you must refer to the issues tab. **This practice is no longer in use however**.
 
-Once the issue is made, be sure to comment on that issue for all progress made.
+### Developers/Credits:
 
-Now, we can create a branch for your work. **DO NOT COMMIT ON MAIN** 
-The branch should have the following naming structure: `YOUR NAME/GITHUB USER/1-2 WORDS ON THE CONTRIBUTION MADE` Examples of such naming structure include `hemit99123/about-page`
-
-Ok now create a PR with the **same name as the issue** and once you are done with your contribution, simply merge the PR and close the issue :)
+- Hemit Patel
 
 ### Happy Coding 🧑🏽‍💻
