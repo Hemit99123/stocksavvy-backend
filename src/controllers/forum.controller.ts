@@ -39,11 +39,14 @@ export const forumController = {
 
         try {
 
+            // delete all associated comments 
+            await db.delete(comment).where(eq(comment.forumID, id));
+
             // delete a document 
             await db
                 .delete(forum)
                 // Match by both email and id, this way only the owner can delete a question
-                .where(eq(forum.email, email as string) && eq(forum.id, id)); 
+                .where(and(eq(forum.email, email as string),eq(forum.id, id))); 
             
             res.status(200).json({
                 message: "Deleted your document successfully"
