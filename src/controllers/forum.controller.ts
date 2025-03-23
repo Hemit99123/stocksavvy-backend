@@ -119,6 +119,10 @@ export const forumCommentController = {
                     content,
                     email
                 })
+            
+            res.status(200).json({
+                message: "Successfully sent"
+            })
         } catch(error) {
             handleError(res, error)
         }
