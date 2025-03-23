@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import handleError from "../utils/error/handleError.ts";
-import { comment, forum } from "../models/schema.ts";
+import { bookmark, comment, forum } from "../models/schema.ts";
 import { db } from "../utils/db/index.ts";
 import { eq, and } from "drizzle-orm";
 
@@ -39,8 +39,9 @@ export const forumController = {
 
         try {
 
-            // delete all associated comments 
+            // delete all all associated documents where forum id is foreign key
             await db.delete(comment).where(eq(comment.forumID, id));
+            await db.delete(bookmark).where(eq(bookmark.forumID, id))
 
             // delete a document 
             await db
@@ -107,7 +108,7 @@ export const forumController = {
             handleError(res,error)
         }
     },
-    
+
     getOnePost: async (req: Request, res: Response) => {
         const { id } = req.query;
 

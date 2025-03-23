@@ -6,20 +6,31 @@ import { eq, and } from "drizzle-orm";
 
 export const bookmarkController = {
     createBookmark: async (req: Request, res: Response) => {
-        const {id} = req.query;
+        const {forumID} = req.query;
         const email = req.session.user.email;
 
         try {
+            const existingBookmark = await db
+                .select()
+                .from(bookmark)
+                .where(and(eq(bookmark.forumID, Number(forumID)), eq(bookmark.email, email)))
+            
+            // do not let user create another bookmark if one already exists of the forumid
+            if (existingBookmark) {
+                throw new Error("Bookmark already exists")
+            } 
+
             await db
                 .insert(bookmark)
                 .values({
                     email,
-                    forumID: Number(id)
-            })
-            
+                    forumID: Number(forumID)
+                })
             res.status(200).json({
                 message: "Created a bookmark"
             })
+            
+
         } catch(error) {
             handleError(error, res)
         }
