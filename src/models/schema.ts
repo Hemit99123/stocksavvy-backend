@@ -37,3 +37,13 @@ export const question = pgTable("question", {
   type: text("type").notNull(),
   correctAnswer: text("correctanswer").notNull()
 });
+
+export const bookmark = pgTable("bookmark", {
+  id: serial("id").primaryKey(),
+  email: text("email")
+    .references(() => user.email)
+    .notNull(),
+  forumID: integer("forumid")
+    .references(() => forum.id)
+    .notNull(),
+});

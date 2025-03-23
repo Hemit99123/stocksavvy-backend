@@ -107,6 +107,7 @@ export const forumController = {
             handleError(res,error)
         }
     },
+    
     getOnePost: async (req: Request, res: Response) => {
         const { id } = req.query;
 
