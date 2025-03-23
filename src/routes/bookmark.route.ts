@@ -1,6 +1,6 @@
 import express from "express"
-import { authenticateSession } from "../middleware/session.middleware";
-import { bookmarkController } from "../controllers/bookmark.controller";
+import { authenticateSession } from "../middleware/session.middleware.ts";
+import { bookmarkController } from "../controllers/bookmark.controller.ts";
 
 const router = express.Router()
 

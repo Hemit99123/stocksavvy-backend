@@ -19,6 +19,7 @@ import indexRoutes from "./src/routes/index.route.ts";
 import authRoutes from "./src/routes/auth.route.ts";
 import forumRoutes from "./src/routes/forum.route.ts";
 import questionRoutes from "./src/routes/questions.route.ts"
+import bookmarkRoutes from "./src/routes/bookmark.route.ts"
 
 // JSON middleware
 app.use(express.json());
@@ -60,6 +61,7 @@ app.use("/", indexRoutes);
 app.use("/auth", authRoutes);
 app.use("/forum", forumRoutes)
 app.use("/question", questionRoutes)
+app.use("/bookmark", bookmarkRoutes)
 
 // Route for api docs from Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
