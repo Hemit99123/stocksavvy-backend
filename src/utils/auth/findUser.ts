@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { user } from "../../models/schema.ts";
+import user from "../../models/user.ts";
 import { db } from "../db/index.ts";
 
 export const findUserOrAdd = async (userEmail: string, userName: string, type: "google" | "email") => {
