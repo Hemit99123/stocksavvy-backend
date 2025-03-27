@@ -35,16 +35,16 @@ These are dev tools that make the code maintainable and production ready. ESLint
 
 ## 🧱 API Architecture:
 
-The API logic is structured into three main folders. It is modelled after the MVC architecture. The "models" are taken care of by the `/drizzle` folder and the `schema.ts` file within `src`.
+The API logic is structured into three main folders. It is modelled after the MVC architecture. 
 
-- #### Controllers
-Contains all business logic, including database queries for API endpoints.
+- Models (`/models`):
+This includes the data structuring for all content being stored on the PostgresSQL database.
 
-- #### Routes
-Includes all endpoints for specific logic types, such as authentication.
+- Views (`/routes`):
+Views is what the end user sees (final product). In the API, the end user would see the content being served through a **route**, hence the file with all the routes is our views folder.
 
-- #### Middleware
-Houses code that runs before any other logic in an endpoint, useful for pre-processing requests, such as checking user authentication.
+- Controllers (`/controllers`):
+This includes all the logic behind each route being served
 
 ## 🔑 Authentication Structure
 
