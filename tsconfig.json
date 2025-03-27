@@ -1,10 +1,10 @@
 {
-    "compilerOptions": {
-      "typeRoots": ["./node_modules/@types", "./src/types"],
-      "module": "CommonJS",
-      "esModuleInterop": true,
-      "noEmit": true,
-      "allowImportingTsExtensions": true
-    },
-    "include": ["src", "src/types/**/*.d.ts", "index.ts"]
-} 
+  "compilerOptions": {
+    "module": "NodeNext", 
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": ["src", "src/types/**/*.d.ts", "index.ts"]
+}
