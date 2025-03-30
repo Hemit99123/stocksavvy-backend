@@ -4,7 +4,6 @@ import user  from "../models/user.ts";
 import { eq } from "drizzle-orm";
 import { errorResponse, successResponse } from "../utils/response/index.ts";
 import { handleDestroySession } from "../utils/auth/sessions.ts";
-import { findUserOrAdd } from "../utils/auth/findUser.ts";
 import { redisClient } from "../utils/auth/redis.ts";
 import { transporter } from "../utils/nodemailer/index.ts";
 
@@ -101,13 +100,22 @@ const authController = {
       const { email, name, otp } = req.body;
 
       // this finds from the sql DB itself
-      const user = await findUserOrAdd(email, name)
+      let userList = await db.select().from(user).where(eq(user.email, email)).execute();
+      const userObj = userList[0]
+
 
       const otpFromEmail = await redisClient.get(redisKeyName(email))
 
       if (otpFromEmail == otp && user) {
+
+        // If the user does not exist, create the user and return true
+        if (userList.length == 0) {
+          await db.insert(user).values({ email: email, name: name, role: "User"});
+        }
+
         // assign the session
-        req.session.user = {email, role: user.role}
+        req.session.user = {email, role: userObj.role}
+        req.session.name = name
 
         // this deletes the otp right after its used (one-use)
         redisClient.del(redisKeyName(email))

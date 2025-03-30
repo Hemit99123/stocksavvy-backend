@@ -5,5 +5,6 @@ declare module "express-session" {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expiry: any;
     user?: { email: string, role: string };
+    name: string;
   }
 }
