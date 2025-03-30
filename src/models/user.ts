@@ -4,6 +4,7 @@ const user = pgTable("user", {
     email: text("email").primaryKey(),
     name: text("name").notNull(),
     type: text("type").notNull(),
+    role: text("role").notNull(),
 });
 
 export default user;
