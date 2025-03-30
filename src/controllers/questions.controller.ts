@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import question from "../models/question.ts";
 import { db } from "../utils/db/index.ts";
-import handleError from "../utils/error/handleError.ts";
+import { errorResponse } from "../utils/response/index.ts";
 import { eq, sql } from "drizzle-orm";
 
 const questionsController = {
@@ -44,7 +44,7 @@ const questionsController = {
         })
 
     } catch(error: unknown) {
-        handleError(res,error)
+        errorResponse(res,error)
     }
   },
 
@@ -61,7 +61,7 @@ const questionsController = {
                 correctAnswer: correctanswer
             })
     } catch(error) {
-        handleError(res, error)
+        errorResponse(res, error)
     }
   }
 

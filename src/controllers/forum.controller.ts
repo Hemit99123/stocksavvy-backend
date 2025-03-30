@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import handleError from "../utils/error/handleError.ts";
+import { errorResponse } from "../utils/response/index.ts";
 import comment from "../models/comment.ts";
 import forum from "../models/forum.ts";
 import { db } from "../utils/db/index.ts";
@@ -30,7 +30,7 @@ export const forumController = {
                 message: "Forum question created successfully",
             });
         } catch (error: unknown) {
-            handleError(res,error)
+            errorResponse(res,error)
         }
     },
 
@@ -54,7 +54,7 @@ export const forumController = {
             })
             
         } catch(error) {
-            handleError(res,error)
+            errorResponse(res,error)
         }
     },
 
@@ -71,7 +71,7 @@ export const forumController = {
                 message: "Updated forum"
             })
         } catch (error: unknown) {
-            handleError(res, error);
+            errorResponse(res, error);
         }
     },
     
@@ -87,7 +87,7 @@ export const forumController = {
             })
 
         } catch(error: unknown) {
-            handleError(res,error)
+            errorResponse(res,error)
         }
     },
 
@@ -105,7 +105,7 @@ export const forumController = {
                 message: "Got all questions for user"
             })
         } catch(error) {
-            handleError(res,error)
+            errorResponse(res,error)
         }
     },
 
@@ -124,7 +124,7 @@ export const forumController = {
             })
                 
         } catch(error) {
-            handleError(res, error)
+            errorResponse(res, error)
         }
     }
 };
@@ -147,7 +147,7 @@ export const forumCommentController = {
                 message: "Successfully sent"
             })
         } catch(error) {
-            handleError(res, error)
+            errorResponse(res, error)
         }
     },
 
@@ -167,7 +167,7 @@ export const forumCommentController = {
             });
             
         } catch (error) {
-            handleError(res, error);
+            errorResponse(res, error);
         }
     },
 
@@ -185,7 +185,7 @@ export const forumCommentController = {
             })
 
         } catch(error: unknown) {
-            handleError(res,error)
+            errorResponse(res,error)
         }
     },
 }

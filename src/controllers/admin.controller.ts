@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import handleError from "../utils/error/handleError.ts";
+import {errorResponse} from "../utils/response/index.ts";
 import { db } from "../utils/db/index.ts";
 import * as questionTable from "../models/question.ts";
 import { eq } from "drizzle-orm";
@@ -34,7 +34,7 @@ const adminController = {
                 message: "Successfully created a question"
             })
         } catch (error) {
-            handleError(res, error);
+            errorResponse(res, error);
         }
     },
 
@@ -50,7 +50,7 @@ const adminController = {
                 message: "Deleted the question"
             })
         } catch (error) {
-            handleError(res, error)
+            errorResponse(res, error)
         }
     }
     

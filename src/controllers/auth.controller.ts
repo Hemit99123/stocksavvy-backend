@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { db } from "../utils/db/index.ts";
 import user  from "../models/user.ts";
 import { eq } from "drizzle-orm";
-import handleError from "../utils/error/handleError.ts";
+import { errorResponse } from "../utils/response/index.ts";
 import { handleDestroySession } from "../utils/auth/sessions.ts";
 import { findUserOrAdd } from "../utils/auth/findUser.ts";
 import { redisClient } from "../utils/auth/redis.ts";
@@ -93,7 +93,7 @@ const authController = {
         message: "Sent email to user with OTP!"
       })
     } catch (error) {
-      handleError(res, error)
+      errorResponse(res, error)
     }
   },
 
@@ -122,7 +122,7 @@ const authController = {
         );      
       }
     } catch (error) {
-      handleError(res,error)
+      errorResponse(res,error)
     }
   },
 
@@ -133,7 +133,7 @@ const authController = {
       }
       handleDestroySession(req, res);
     } catch (error) {
-      handleError(res, error);
+      errorResponse(res, error);
     }
   },
 
@@ -146,7 +146,7 @@ const authController = {
       await db.delete(user).where(eq(user.email, email)).execute();
       handleDestroySession(req, res);
     } catch (error) {
-      handleError(res, error);
+      errorResponse(res, error);
     }
   },
 
@@ -155,7 +155,7 @@ const authController = {
       const auth = req.session.user ? true : false;
       res.json({session: req.session.user, auth: auth})
     } catch (error) {
-      handleError(res, error)
+      errorResponse(res, error)
     }
   }
 };
