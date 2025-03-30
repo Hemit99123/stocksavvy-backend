@@ -14,7 +14,6 @@ export const authenticateSession = (
     return res.status(401).json({
       message:
         "You are currently not authenticated! Please log in and try again.",
-      error: "no-auth",
     });
   }
 };
@@ -24,5 +23,12 @@ export const authenticateAdminSession = (
   res: Response, 
   next: NextFunction,
 ) => {
-  next()
+  if (req.session.user && req.session.user.role === "Admin") {
+    next();
+  } else {
+    return res.status(401).json({
+      message:
+        "You are currently not authenticated! Please log in and try again.",
+    });
+  }
 }

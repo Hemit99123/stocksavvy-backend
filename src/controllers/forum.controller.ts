@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { errorResponse } from "../utils/response/index.ts";
+import { errorResponse, successResponse } from "../utils/response/index.ts";
 import comment from "../models/comment.ts";
 import forum from "../models/forum.ts";
 import { db } from "../utils/db/index.ts";
@@ -25,10 +25,8 @@ export const forumController = {
                     email,
                     content
                 });
+            successResponse(res, "Forum question created")
 
-            res.status(201).json({
-                message: "Forum question created successfully",
-            });
         } catch (error: unknown) {
             errorResponse(res,error)
         }
@@ -48,10 +46,8 @@ export const forumController = {
                 .delete(forum)
                 // Match by both email and id, this way only the owner can delete a question
                 .where(and(eq(forum.email, email as string),eq(forum.id, id))); 
-            
-            res.status(200).json({
-                message: "Deleted your document successfully"
-            })
+
+            successResponse(res, "Deleted your question")
             
         } catch(error) {
             errorResponse(res,error)
@@ -66,10 +62,8 @@ export const forumController = {
             await db.update(forum)
                 .set({ content,question })
                 .where(and(eq(forum.id, id), eq(forum.email, email)));
-            
-            res.status(200).json({
-                message: "Updated forum"
-            })
+            successResponse(res, "Updated forum")
+
         } catch (error: unknown) {
             errorResponse(res, error);
         }
@@ -102,7 +96,6 @@ export const forumController = {
             
             res.status(200).json({
                 questions,
-                message: "Got all questions for user"
             })
         } catch(error) {
             errorResponse(res,error)
@@ -120,7 +113,6 @@ export const forumController = {
             
             res.status(200).json({
                 question: questions[0],
-                message: "Got question based off id"
             })
                 
         } catch(error) {
@@ -142,10 +134,8 @@ export const forumCommentController = {
                     content,
                     email
                 })
-            
-            res.status(200).json({
-                message: "Successfully sent"
-            })
+            successResponse(res, "Successfully sent")
+
         } catch(error) {
             errorResponse(res, error)
         }
@@ -162,9 +152,7 @@ export const forumCommentController = {
                 .delete(comment)
                 .where(and(eq(comment.email, email), eq(comment.id, id))); 
             
-            res.status(200).json({
-                message: "Deleted your comment successfully"
-            });
+            successResponse(res, "Deleted your comment successfully")
             
         } catch (error) {
             errorResponse(res, error);

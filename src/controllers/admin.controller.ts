@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import {errorResponse} from "../utils/response/index.ts";
+import {errorResponse, successResponse} from "../utils/response/index.ts";
 import { db } from "../utils/db/index.ts";
 import * as questionTable from "../models/question.ts";
 import { eq } from "drizzle-orm";
@@ -30,9 +30,7 @@ const adminController = {
                     correctAnswer
                 })
             
-            res.json({
-                message: "Successfully created a question"
-            })
+            successResponse(res, "Created question")
         } catch (error) {
             errorResponse(res, error);
         }
@@ -46,9 +44,7 @@ const adminController = {
             .delete(questionTable.default)
             .where(eq(questionTable.default.id, id))
 
-            res.json({
-                message: "Deleted the question"
-            })
+            successResponse(res, "Deleted question")
         } catch (error) {
             errorResponse(res, error)
         }

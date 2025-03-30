@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { db } from "../utils/db/index.ts";
 import user  from "../models/user.ts";
 import { eq } from "drizzle-orm";
-import { errorResponse } from "../utils/response/index.ts";
+import { errorResponse, successResponse } from "../utils/response/index.ts";
 import { handleDestroySession } from "../utils/auth/sessions.ts";
 import { findUserOrAdd } from "../utils/auth/findUser.ts";
 import { redisClient } from "../utils/auth/redis.ts";
@@ -89,9 +89,8 @@ const authController = {
       // sending the email to the user
       await transporter.sendMail(mailOptions);  
 
-      res.json({
-        message: "Sent email to user with OTP!"
-      })
+      successResponse(res, "Sent email to user with OTP!")
+
     } catch (error) {
       errorResponse(res, error)
     }
@@ -101,22 +100,24 @@ const authController = {
     try {
       const { email, name, otp } = req.body;
 
-      const continueLogin = await findUserOrAdd(email, name, "email")
+      // this finds from the sql DB itself
+      const user = await findUserOrAdd(email, name)
 
       const otpFromEmail = await redisClient.get(redisKeyName(email))
 
-      if (otpFromEmail == otp && continueLogin) {
+      if (otpFromEmail == otp && user) {
         // assign the session
-        req.session.user = {email}
+        req.session.user = {email, role: user.role}
 
         // this deletes the otp right after its used (one-use)
         redisClient.del(redisKeyName(email))
-        res.json({ message: "Successfully logged in", name});
+        successResponse(res, "Sucessfully logged in")
+
       } else {
         throw new Error(
           otpFromEmail !== otp 
             ? "Invalid OTP" 
-            : !continueLogin 
+            : !user 
               ? "This email is in-use by the google provider" 
               : "An unexpected error occurred"
         );      
@@ -154,6 +155,7 @@ const authController = {
     try {
       const auth = req.session.user ? true : false;
       res.json({session: req.session.user, auth: auth})
+
     } catch (error) {
       errorResponse(res, error)
     }

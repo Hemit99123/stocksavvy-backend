@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import { successResponse } from "../response/index.ts";
 
 export const handleDestroySession = (req: Request, res: Response) => {
     req.session.destroy((err) => {
@@ -6,7 +7,7 @@ export const handleDestroySession = (req: Request, res: Response) => {
         
         // clear the session id cookie on the frontend
         res.clearCookie('session-id', { path: '/' });
-        return res.json({ message: "Logged out successfully" });
+        return successResponse(res, "Logged out successfully")
   
       });
 }

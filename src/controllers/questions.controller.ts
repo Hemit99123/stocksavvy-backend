@@ -46,25 +46,7 @@ const questionsController = {
     } catch(error: unknown) {
         errorResponse(res,error)
     }
-  },
-
-  createQuestion: async (req: Request, res: Response) => {
-    const { question_content, options, type, correctanswer} = req.body;
-
-    try {
-        await db
-            .insert(question)
-            .values({
-                question: question_content,
-                options, 
-                type,
-                correctAnswer: correctanswer
-            })
-    } catch(error) {
-        errorResponse(res, error)
-    }
   }
-
 };
 
 export default questionsController;
