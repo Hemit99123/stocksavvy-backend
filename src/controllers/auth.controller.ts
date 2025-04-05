@@ -114,8 +114,7 @@ const authController = {
         }
 
         // assign the session
-        req.session.user = {email, role: userObj.role}
-        req.session.name = name
+        req.session.user = {email, role: userObj.role, name}
 
         // this deletes the otp right after its used (one-use)
         redisClient.del(redisKeyName(email))
