@@ -8,7 +8,7 @@ import { redisClient } from "../utils/auth/redis.ts";
 import { transporter } from "../utils/nodemailer/index.ts";
 
 // This ensures a uniform keyname for all the times we access otp redis keys
-const redisKeyName = (email: string) => {
+const redisOTPKeyName = (email: string) => {
   return `otp:${email}`
 }
 
@@ -18,7 +18,7 @@ const authController = {
       const { email } = req.body;
       const random4DigitNumber = Math.floor(1000 + Math.random() * 9000);
 
-      await redisClient.set(redisKeyName(email), random4DigitNumber, 'EX', 180)
+      await redisClient.set(redisOTPKeyName(email), random4DigitNumber, 'EX', 180)
 
       const mailOptions = {
         to: email,
@@ -104,7 +104,7 @@ const authController = {
       const userObj = userList[0]
 
 
-      const otpFromEmail = await redisClient.get(redisKeyName(email))
+      const otpFromEmail = await redisClient.get(redisOTPKeyName(email))
 
       if (otpFromEmail == otp && user) {
 
@@ -117,7 +117,7 @@ const authController = {
         req.session.user = {email, role: userObj.role, name}
 
         // this deletes the otp right after its used (one-use)
-        redisClient.del(redisKeyName(email))
+        redisClient.del(redisOTPKeyName(email))
         successResponse(res, "Sucessfully logged in")
 
       } else {
