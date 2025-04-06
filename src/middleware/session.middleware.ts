@@ -10,7 +10,7 @@ export const authenticateSession = async (
   // only using passportjs for the authentication middleware
 
   const session = await handleGetSession(req)
-  if (session) {
+  if (session.user && session.email && session.role) {
     next();
   } else {
     return res.status(401).json({
@@ -28,7 +28,7 @@ export const authenticateAdminSession = async (
 
   const session = await handleGetSession(req)
 
-  if (session.role == "Admin") {
+  if (session.user && session.email && session.role == "Admin") {
     next();
   } else {
     return res.status(401).json({
