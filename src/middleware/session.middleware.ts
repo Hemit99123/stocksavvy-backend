@@ -34,6 +34,7 @@ export const authenticateAdminSession = async (
     return res.status(401).json({
       message:
         "You are not an admin authenticated user. Contact StockSavvy technology department for more information.",
+      cookie: req.cookies["session-id"]
     });
   }
 }
