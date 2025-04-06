@@ -1,12 +1,9 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpecs from "./src/utils/docs/swaggerConfig.ts";
-import session, { SessionData } from "express-session";
-import { redisClient, redisOMClient } from "./src/utils/auth/redis.ts";
 import cors from "cors";
-import { RedisStore } from "connect-redis";
 import dotenv from "dotenv";
-import { v4 as uuidv4 } from "uuid";
+
 dotenv.config();
 
 // Server configuration
