@@ -125,7 +125,7 @@ const router = express.Router();
  */
 
 
-router.post("/login/email-magic", authController.loginEmail)
+router.post("/login", authController.login)
 router.post("/assign-otp", authController.assignOtp)
 router.get("/logout", authController.logout);
 router.delete("/delete", authController.deleteUser);
