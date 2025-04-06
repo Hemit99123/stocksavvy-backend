@@ -37,7 +37,7 @@ export const handleCreateSession = async (name: string, email: string, role: str
 
   await sessionRepo.save(sid, sessionData);
 
-  res.cookie('session-id', sid, { httpOnly: true, domain: process.env.DOMAIN}); 
+  res.cookie('session-id', sid, { httpOnly: true, domain: process.env.DOMAIN, secure: true, sameSite: "none"}); 
 
   redisOMClient.disconnect()
 }
