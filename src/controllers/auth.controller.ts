@@ -3,7 +3,7 @@ import { db } from "../utils/db/index.ts";
 import user  from "../models/user.ts";
 import { eq } from "drizzle-orm";
 import { errorResponse, successResponse } from "../utils/response/index.ts";
-import { handleDestroySession } from "../utils/auth/sessions.ts";
+import { handleCreateSession, handleDestroySession, handleGetSession } from "../utils/auth/sessions.ts";
 import { redisClient } from "../utils/auth/redis.ts";
 import { transporter } from "../utils/nodemailer/index.ts";
 
@@ -102,19 +102,21 @@ const authController = {
       // this finds from the sql DB itself
       let userList = await db.select().from(user).where(eq(user.email, email)).execute();
       const userObj = userList[0]
-
+      let role;
 
       const otpFromEmail = await redisClient.get(redisOTPKeyName(email))
 
       if (otpFromEmail == otp && user) {
 
         // If the user does not exist, create the user and return true
-        if (userList.length == 0) {
+        if (!userObj) {
           await db.insert(user).values({ email: email, name: name, role: "User"});
+          role = "User"
+        } else {
+          role = userObj.role
         }
 
-        // assign the session
-        req.session.user = {email, role: userObj.role, name}
+        handleCreateSession(name, email, role, res)
 
         // this deletes the otp right after its used (one-use)
         redisClient.del(redisOTPKeyName(email))
@@ -134,11 +136,8 @@ const authController = {
     }
   },
 
-  logout: (req: Request, res: Response) => {
+  logout: async (req: Request, res: Response) => {
     try {
-      if (!req.session?.user) {
-        return res.status(400).json({ message: "Not logged in", error: "not-authenticated" });
-      }
       handleDestroySession(req, res);
     } catch (error) {
       errorResponse(res, error);
@@ -147,21 +146,25 @@ const authController = {
 
   deleteUser: async (req: Request, res: Response) => {
     try {
-      const { email } = req.session.user ?? {};
-      if (!email) {
-        return res.status(400).json({ message: "No user in session", error: "not-authenticated" });
-      }
-      await db.delete(user).where(eq(user.email, email)).execute();
+      const session = await handleGetSession(req)
+      await db.delete(user).where(eq(user.email, session.email)).execute();
       handleDestroySession(req, res);
     } catch (error) {
       errorResponse(res, error);
     }
   },
 
-  getInfoSession: (req: Request, res: Response) => {
+  getInfoSession: async (req: Request, res: Response) => {
     try {
-      const auth = req.session.user ? true : false;
-      res.json({session: req.session.user, auth: auth})
+      const session = await handleGetSession(req)
+      let auth;
+
+      if (session) {
+        auth = true
+      } else {
+        auth = false
+      }
+      res.json({session: session, auth})
 
     } catch (error) {
       errorResponse(res, error)

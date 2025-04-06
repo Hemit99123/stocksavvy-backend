@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
+import { handleGetSession } from "../utils/auth/sessions.ts";
 
-export const authenticateSession = (
+export const authenticateSession = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -8,7 +9,8 @@ export const authenticateSession = (
   // using express sessions for session management (instead of pure passportjs)
   // only using passportjs for the authentication middleware
 
-  if (req.session.user) {
+  const session = await handleGetSession(req)
+  if (session) {
     next();
   } else {
     return res.status(401).json({
@@ -18,17 +20,20 @@ export const authenticateSession = (
   }
 };
 
-export const authenticateAdminSession = (
+export const authenticateAdminSession = async (
   req: Request,
   res: Response, 
   next: NextFunction,
 ) => {
-  if (req.session.user && req.session.user.role === "Admin") {
+
+  const session = await handleGetSession(req)
+
+  if (session.role == "Admin") {
     next();
   } else {
     return res.status(401).json({
       message:
-        "You are currently not authenticated! Please log in and try again.",
+        "You are not an admin authenticated user. Contact StockSavvy technology department for more information.",
     });
   }
 }
