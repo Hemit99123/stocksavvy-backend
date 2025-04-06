@@ -3,6 +3,9 @@ import { Repository } from "redis-om";
 import sessionsSchema from "../../redisSchema/sessions.schema.ts"
 import { redisOMClient } from "./redis.ts";
 import { v4 as uuidv4 } from 'uuid';
+import dotenv from "dotenv"
+
+dotenv.config()
 
 export const handleDestroySession = async (req: Request, res: Response) => {
 
@@ -34,7 +37,7 @@ export const handleCreateSession = async (name: string, email: string, role: str
 
   await sessionRepo.save(sid, sessionData);
 
-  res.cookie('session-id', sid, { httpOnly: true}); 
+  res.cookie('session-id', sid, { httpOnly: true, domain: process.env.DOMAIN}); 
 
   redisOMClient.disconnect()
 }
