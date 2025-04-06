@@ -138,7 +138,10 @@ const authController = {
 
   logout: async (req: Request, res: Response) => {
     try {
-      handleDestroySession(req, res);
+      await handleDestroySession(req, res);
+
+      successResponse(res, "Logged user out")
+
     } catch (error) {
       errorResponse(res, error);
     }
@@ -148,7 +151,10 @@ const authController = {
     try {
       const session = await handleGetSession(req)
       await db.delete(user).where(eq(user.email, session.email)).execute();
-      handleDestroySession(req, res);
+      await handleDestroySession(req, res);
+
+      successResponse(res, "Deleted user")
+
     } catch (error) {
       errorResponse(res, error);
     }
