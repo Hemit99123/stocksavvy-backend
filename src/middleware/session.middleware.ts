@@ -10,15 +10,12 @@ export const authenticateSession = async (
   // only using passportjs for the authentication middleware
 
   const session = await handleGetSession(req)
-  if (session.user && session.email && session.role) {
+  if (session.name && session.email && session.role) {
     next();
   } else {
     return res.status(401).json({
       message:
         "You are currently not authenticated! Please log in and try again.",
-      cookie: req.cookies["session-id"],
-      session
-
     });
   }
 };
@@ -31,13 +28,12 @@ export const authenticateAdminSession = async (
 
   const session = await handleGetSession(req)
 
-  if (session.user && session.email && session.role == "Admin") {
+  if (session.name && session.email && session.role == "Admin") {
     next();
   } else {
     return res.status(401).json({
       message:
         "You are not an admin authenticated user. Contact StockSavvy technology department for more information.",
-      cookie: req.cookies["session-id"]
     });
   }
 }
