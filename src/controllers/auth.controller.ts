@@ -116,7 +116,7 @@ const authController = {
           role = userObj.role
         }
 
-        handleCreateSession(name, email, role, res)
+        await handleCreateSession(name, email, role, res)
 
         // this deletes the otp right after its used (one-use)
         redisClient.del(redisOTPKeyName(email))
