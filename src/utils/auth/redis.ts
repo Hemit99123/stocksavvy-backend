@@ -5,4 +5,6 @@ import { createClient } from "redis"
 dotenv.config();
 
 export const redisClient = new Redis(process.env.REDIS_ENDPOINT as string);
-export const redisOMClient = createClient()
+export const redisOMClient = createClient({
+    url: process.env.REDIS_ENDPOINT
+})

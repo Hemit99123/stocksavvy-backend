@@ -5,15 +5,24 @@ import { redisOMClient } from "./redis.ts";
 import { v4 as uuidv4 } from 'uuid';
 
 export const handleDestroySession = async (req: Request, res: Response) => {
+
+  redisOMClient.connect()
+
   const sid = req.cookies["session-id"]
   const sessionRepo = new Repository(sessionsSchema, redisOMClient);
   
   await sessionRepo.remove(sid)
 
   res.clearCookie("session-id")
+
+  redisOMClient.disconnect()
+
 }
 
 export const handleCreateSession = async (name: string, email: string, role: string, res: Response) => {
+
+  redisOMClient.connect()
+
   const sid = uuidv4()
   const sessionRepo = new Repository(sessionsSchema, redisOMClient);
 
@@ -27,13 +36,19 @@ export const handleCreateSession = async (name: string, email: string, role: str
 
   res.cookie('session-id', sid, { httpOnly: true}); 
 
+  redisOMClient.disconnect()
 }
 
 export const handleGetSession = async (req: Request) => {
+
+  redisOMClient.connect()
+
   const sid = req.cookies["session-id"]
   const sessionRepo = new Repository(sessionsSchema, redisOMClient);
 
   const session = await sessionRepo.fetch(sid)
+
+  redisOMClient.disconnect()
 
   return session
 }
