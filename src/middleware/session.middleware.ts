@@ -16,7 +16,8 @@ export const authenticateSession = async (
     return res.status(401).json({
       message:
         "You are currently not authenticated! Please log in and try again.",
-      cookie: req.cookies["session-id"]
+      cookie: req.cookies["session-id"],
+      session
 
     });
   }

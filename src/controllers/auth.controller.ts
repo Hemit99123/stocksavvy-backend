@@ -163,11 +163,7 @@ const authController = {
   getInfoSession: async (req: Request, res: Response) => {
     try {
       const session = await handleGetSession(req)
-      const response = {
-        [Symbol('entityId')]: undefined,
-        [Symbol('entityKeyName')]: 'sess:undefined'
-      };
-
+      
       let auth;
 
       if (session.email && session.name && session.role) {
