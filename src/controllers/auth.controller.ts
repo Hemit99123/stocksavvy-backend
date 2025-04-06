@@ -2,14 +2,13 @@ import type { Request, Response } from "express";
 import { db } from "../utils/db/index.ts";
 import user  from "../models/user.ts";
 import { eq } from "drizzle-orm";
-import handleError from "../utils/error/handleError.ts";
-import { handleDestroySession } from "../utils/auth/sessions.ts";
-import { findUserOrAdd } from "../utils/auth/findUser.ts";
+import { errorResponse, successResponse } from "../utils/response/index.ts";
+import { handleCreateSession, handleDestroySession, handleGetSession } from "../utils/auth/sessions.ts";
 import { redisClient } from "../utils/auth/redis.ts";
 import { transporter } from "../utils/nodemailer/index.ts";
 
 // This ensures a uniform keyname for all the times we access otp redis keys
-const redisKeyName = (email: string) => {
+const redisOTPKeyName = (email: string) => {
   return `otp:${email}`
 }
 
@@ -19,7 +18,7 @@ const authController = {
       const { email } = req.body;
       const random4DigitNumber = Math.floor(1000 + Math.random() * 9000);
 
-      await redisClient.set(redisKeyName(email), random4DigitNumber, 'EX', 180)
+      await redisClient.set(redisOTPKeyName(email), random4DigitNumber, 'EX', 180)
 
       const mailOptions = {
         to: email,
@@ -89,73 +88,98 @@ const authController = {
       // sending the email to the user
       await transporter.sendMail(mailOptions);  
 
-      res.json({
-        message: "Sent email to user with OTP!"
-      })
+      successResponse(res, "Sent email to user with OTP!")
+
     } catch (error) {
-      handleError(res, error)
+      errorResponse(res, error)
     }
   },
 
-  loginEmail: async (req: Request, res: Response) => {
+  login: async (req: Request, res: Response) => {
     try {
       const { email, name, otp } = req.body;
 
-      const continueLogin = await findUserOrAdd(email, name, "email")
+      // this finds from the sql DB itself
+      let userList = await db.select().from(user).where(eq(user.email, email)).execute();
+      const userObj = userList[0]
+      let role;
 
-      const otpFromEmail = await redisClient.get(redisKeyName(email))
+      const otpFromEmail = await redisClient.get(redisOTPKeyName(email))
 
-      if (otpFromEmail == otp && continueLogin) {
-        // assign the session
-        req.session.user = {email}
+      if (otpFromEmail == otp && user) {
+
+        // If the user does not exist, create the user and return true
+        if (!userObj) {
+          await db.insert(user).values({ email: email, name: name, role: "User"});
+          role = "User"
+        } else {
+          role = userObj.role
+        }
+
+        await handleCreateSession(name, email, role, res)
 
         // this deletes the otp right after its used (one-use)
-        redisClient.del(redisKeyName(email))
-        res.json({ message: "Successfully logged in", name});
+        redisClient.del(redisOTPKeyName(email))
+        successResponse(res, "Sucessfully logged in")
+
       } else {
         throw new Error(
           otpFromEmail !== otp 
             ? "Invalid OTP" 
-            : !continueLogin 
+            : !user 
               ? "This email is in-use by the google provider" 
               : "An unexpected error occurred"
         );      
       }
     } catch (error) {
-      handleError(res,error)
+      errorResponse(res,error)
     }
   },
 
-  logout: (req: Request, res: Response) => {
+  logout: async (req: Request, res: Response) => {
     try {
-      if (!req.session?.user) {
-        return res.status(400).json({ message: "Not logged in", error: "not-authenticated" });
-      }
-      handleDestroySession(req, res);
+      await handleDestroySession(req, res);
+
+      successResponse(res, "Logged user out")
+
     } catch (error) {
-      handleError(res, error);
+      errorResponse(res, error);
     }
   },
 
   deleteUser: async (req: Request, res: Response) => {
     try {
-      const { email } = req.session.user ?? {};
-      if (!email) {
-        return res.status(400).json({ message: "No user in session", error: "not-authenticated" });
-      }
-      await db.delete(user).where(eq(user.email, email)).execute();
-      handleDestroySession(req, res);
+      const session = await handleGetSession(req)
+      await db.delete(user).where(eq(user.email, session.email)).execute();
+      await handleDestroySession(req, res);
+
+      successResponse(res, "Deleted user")
+
     } catch (error) {
-      handleError(res, error);
+      errorResponse(res, error);
     }
   },
 
-  getInfoSession: (req: Request, res: Response) => {
+  getInfoSession: async (req: Request, res: Response) => {
     try {
-      const auth = req.session.user ? true : false;
-      res.json({session: req.session.user, auth: auth})
+      const session = await handleGetSession(req)
+      const response = {
+        [Symbol('entityId')]: undefined,
+        [Symbol('entityKeyName')]: 'sess:undefined'
+      };
+
+      let auth;
+
+      if (session.email && session.name && session.role) {
+        auth = true
+      } else {
+        auth = false
+      }
+      
+      res.json({session: session, auth})
+
     } catch (error) {
-      handleError(res, error)
+      errorResponse(res, error)
     }
   }
 };
