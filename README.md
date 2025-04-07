@@ -55,11 +55,11 @@ To explore the different endpoints and their intended use cases, please navigate
 
 ## Contributions?
 
-Contributions are allowed! We ask that you follow certain rules whilst making contributions. All work that you do will be **voluntary** and not privy to payment. However, you can use **your** contributions as work experience for any future work you might apply for. This can only be done if you follow our rules as listed below...
+Contributions are allowed only for staff. We ask that you follow certain rules whilst making contributions. All work that you do will be **voluntary** and not privy to payment. However, you can use **your** contributions as work experience for any future work you might apply for. This can only be done if you follow our rules as listed below...
 
 #### The rules:
 
-First, create a development branch for your work. **DO NOT COMMIT ON MAIN** 
+First, create a development branch for your work. **DO NOT COMMIT ON MAIN.** 
 The branch should have the following naming structure: `YOUR NAME/GITHUB USER/1-2 WORDS ON THE CONTRIBUTION MADE` Examples of such naming structure include `hemit99123/about-page`
 
 Now create a PR (pull request) to merge that development branch to the main branch. The naming of the PR should start off with:
