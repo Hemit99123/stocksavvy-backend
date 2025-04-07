@@ -4,7 +4,7 @@ import user  from "../models/user.ts";
 import { eq } from "drizzle-orm";
 import { errorResponse, successResponse } from "../utils/response/index.ts";
 import { handleCreateSession, handleDestroySession, handleGetSession } from "../utils/auth/sessions.ts";
-import { redisClient } from "../utils/auth/redis.ts";
+import { redisClient, connectOTPRedis, disconnectOTPRedis } from "../utils/auth/redis.ts";
 import { transporter } from "../utils/nodemailer/index.ts";
 
 // This ensures a uniform keyname for all the times we access otp redis keys
@@ -18,6 +18,7 @@ const authController = {
       const { email } = req.body;
       const random4DigitNumber = Math.floor(1000 + Math.random() * 9000);
 
+      await connectOTPRedis();
       await redisClient.set(redisOTPKeyName(email), random4DigitNumber, 'EX', 180)
 
       const mailOptions = {
@@ -92,6 +93,8 @@ const authController = {
 
     } catch (error) {
       errorResponse(res, error)
+    } finally {
+      await disconnectOTPRedis();
     }
   },
 
@@ -104,6 +107,7 @@ const authController = {
       const userObj = userList[0]
       let role;
 
+      await connectOTPRedis();
       const otpFromEmail = await redisClient.get(redisOTPKeyName(email))
 
       if (otpFromEmail == otp && user) {
@@ -119,7 +123,7 @@ const authController = {
         await handleCreateSession(name, email, role, res)
 
         // this deletes the otp right after its used (one-use)
-        redisClient.del(redisOTPKeyName(email))
+        await redisClient.del(redisOTPKeyName(email))
         successResponse(res, "Sucessfully logged in")
 
       } else {
@@ -133,6 +137,8 @@ const authController = {
       }
     } catch (error) {
       errorResponse(res,error)
+    } finally {
+      await disconnectOTPRedis();
     }
   },
 
