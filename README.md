@@ -19,13 +19,7 @@ Drizzle serves as both an ORM and a query builder, providing a mid-level abstrac
 NodeJS is a runtime environment for JavaScript, enabling server-side execution of JavaScript code. This allows for a unified programming language across the web app and API, enhancing developer experience. Its asynchronous features and promise-based structure add to its appeal. From NodeJS 23 and onwards, TypeScript can be natively ran, allowing developers to use it in place for JavaScript.
 
 ### - Redis Clusters
-Redis is an in-memory database, storing data in RAM for faster access compared to traditional databases like SQL or NoSQL (e.g., MongoDB, Cassandra). However, this also means it is susceptible to data loss on server shutdown, making it suitable for ephemeral data like sessions and verification codes. Clusters enable horizontal sharding, improving scalability, especially for session-based authentication. Two separate Redis caches are used to host two different types of sessions:
-
-- **Admin Session Cache:** For admin user sessions, providing secure storage and quicker access to admin-related session data.
-- **Regular Session Cache:** For standard user sessions, ensuring scalability and performance for the majority of users.
-
-### - Express Sessions
-This technology abstracts session-based authentication logic from developers, leading to improved developer experience and adhering to industry best practices for security and scalability.
+Redis is an in-memory database, storing data in RAM for faster access compared to traditional databases like SQL or NoSQL (e.g., MongoDB, Cassandra). However, this also means it is susceptible to data loss on server shutdown, making it suitable for ephemeral data like sessions and verification codes. Clusters enable horizontal sharding, improving scalability, especially for session-based authentication.
 
 ### - Swagger
 Swagger is used for seamless API documentation.
@@ -48,12 +42,12 @@ This includes all the logic behind each route being served
 
 ## 🔑 Authentication Structure
 
-The authentication system utilizes **Express Sessions** in conjunction with **Redis Clusters** for session storage. The sessions are divided into two separate Redis caches:
+The authentication system utilizes **session-based authentication** in conjunction with **Redis Clusters** for session storage. Each session has a role attribute which is used to power the role-based access control system, providing some permissions to Admins ans restricting them from Users.
 
-- **Admin Sessions:** Hosted on a dedicated Redis cache, providing isolated storage for admin sessions. This enhances security and makes admin session management more robust.
-- **Regular Sessions:** Stored on a separate Redis cache, catering to standard users. This setup ensures the scalability of regular user sessions without affecting admin sessions.
+### Current roles:
+- User (can create forum questions and voew resources)
 
-Sessions are validated through middleware before API endpoints are accessed, ensuring only authenticated users can access protected routes.
+- Admin (User permissions + can create questions for the question bank)
 
 ## 📝 Endpoint Docs:
 
