@@ -19,7 +19,9 @@ const authController = {
       const random4DigitNumber = Math.floor(1000 + Math.random() * 9000);
 
       await connectOTPRedis();
-      await redisClient.set(redisOTPKeyName(email), random4DigitNumber, 'EX', 180)
+      await redisClient.set(redisOTPKeyName(email), random4DigitNumber, {
+        EX: 180000
+      })
 
       const mailOptions = {
         to: email,
