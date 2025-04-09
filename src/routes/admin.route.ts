@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.post("/create-question", authenticateAdminSession, adminController.createQuestion)
 router.delete("/delete-question", authenticateAdminSession, adminController.deleteQuestion)
+router.get("/get-session", adminController.getInfoSession)
 
 export default router;

@@ -3,6 +3,7 @@ import {errorResponse, successResponse} from "../utils/response/index.ts";
 import { db } from "../utils/db/index.ts";
 import * as questionTable from "../models/question.ts";
 import { eq } from "drizzle-orm";
+import { handleGetSession } from "../utils/auth/sessions.ts";
 
 const adminController = {
     createQuestion: async (req: Request, res: Response) => {
@@ -47,6 +48,25 @@ const adminController = {
             successResponse(res, "Deleted question")
         } catch (error) {
             errorResponse(res, error)
+        }
+    },
+
+    getInfoSession: async (req: Request, res: Response) => {
+        try {
+          const session = await handleGetSession(req)
+          
+          let auth;
+    
+          if (session.email && session.name && session.role === "Admin") {
+            auth = true
+          } else {
+            auth = false
+          }
+          
+          res.json({session: session, auth})
+    
+        } catch (error) {
+          errorResponse(res, error)
         }
     }
     
