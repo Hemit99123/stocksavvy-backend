@@ -48,7 +48,9 @@ const questionsController = {
     }
   },
 
-  getAllQuestions: async (req: Request, res: Response) => {
+  getMultipleQuestions: async (req: Request, res: Response) => {
+
+
     try {
         const questions = await db
         .select()

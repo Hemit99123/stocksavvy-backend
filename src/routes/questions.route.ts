@@ -4,6 +4,6 @@ import { authenticateSession } from "../middleware/session.middleware.ts";
 const router = express.Router();
 
 router.get("/get", authenticateSession, questionsController.getRandomQuestions)
-router.get("/get-all", authenticateSession, questionsController.getAllQuestions)
+router.get("/get-multiple", authenticateSession, questionsController.getMultipleQuestions)
 
 export default router;
