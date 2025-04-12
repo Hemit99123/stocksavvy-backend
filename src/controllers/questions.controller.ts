@@ -46,6 +46,20 @@ const questionsController = {
     } catch(error: unknown) {
         errorResponse(res,error)
     }
+  },
+
+  getAllQuestions: async (req: Request, res: Response) => {
+    try {
+        const questions = await db
+        .select()
+        .from(question)
+
+        res.status(200).json({
+            questions
+        })
+    } catch(error: unknown) {
+        errorResponse(res, error)
+    }
   }
 };
 
