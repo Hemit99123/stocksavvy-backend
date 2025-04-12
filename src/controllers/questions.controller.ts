@@ -50,19 +50,24 @@ const questionsController = {
 
   getMultipleQuestions: async (req: Request, res: Response) => {
 
-
+    // Different filters available to add within search
+    const { type } = req.query;
+  
     try {
-        const questions = await db
-        .select()
-        .from(question)
-
-        res.status(200).json({
-            questions
-        })
-    } catch(error: unknown) {
-        errorResponse(res, error)
+      const baseQuery = db.select().from(question);
+  
+      const query = typeof type === 'string'
+        ? baseQuery.where(eq(question.type, type))
+        : baseQuery;
+  
+      const questions = await query;
+  
+      res.status(200).json({ questions });
+    } catch (error: unknown) {
+      errorResponse(res, error);
     }
   }
+  
 };
 
 export default questionsController;
