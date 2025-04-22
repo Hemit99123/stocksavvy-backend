@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express from 'express';
-import indexController from '../../controllers/index.controller.ts'; // Adjust path accordingly
+import indexController from '../../../controllers/index.controller.ts'; // Adjust path accordingly
 
 // Create an Express app and set up the route
 const app = express();
