@@ -30,6 +30,9 @@ These are dev tools that make the code maintainable and production ready. ESLint
 ### - Jest
 Jest is used for testing different software systems within our backend application. We specifically use it for integration and unit testing
 
+### - Supertest
+Supertest allows for the mocking of a HTTP server through creating a temporary in-memory one. This way we can test out all REST API endpoints for validity.
+
 ## 🧱 API Architecture:
 
 The API logic is structured into three main folders. It is modelled after the MVC architecture. 
