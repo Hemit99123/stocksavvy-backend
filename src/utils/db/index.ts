@@ -7,10 +7,10 @@ dotenv.config();
 // Since pg may still support module.exports syntax
 const { Pool } = pkg;
 
-import comment from "../../models/comment.ts";
-import forum from "../../models/forum.ts";
-import question from "../../models/question.ts";
-import user from "../../models/user.ts";
+import comment from "../../models/db/comment.ts";
+import forum from "../../models/db/forum.ts";
+import question from "../../models/db/question.ts";
+import user from "../../models/db/user.ts";
 
 export const schema = {...comment, ...forum, ...question, ...user}
 

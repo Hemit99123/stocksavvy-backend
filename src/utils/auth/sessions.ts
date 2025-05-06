@@ -1,6 +1,6 @@
 import type { Response, Request } from "express";
 import { Repository } from "redis-om";
-import sessionsSchema from "../../redisSchema/sessions.schema.ts"
+import sessionsSchema from "../../models/redis/sessions.ts"
 import { redisOMClient, connectRedis, disconnectRedis } from "./redis.ts";
 import { v4 as uuidv4 } from 'uuid';
 import dotenv from "dotenv"
