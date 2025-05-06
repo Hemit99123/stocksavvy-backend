@@ -27,6 +27,12 @@ Swagger is used for seamless API documentation.
 ### - Husky + ESLint
 These are dev tools that make the code maintainable and production ready. ESLint is a linting software that ensures code follows a strict set of rules designed for longevity and production readiness. Both **ESLint** and **Husky** are configured to run automatically before each commit to the GitHub remote repository.
 
+### - Jest
+Jest is used for testing different software systems within our backend application. We specifically use it for integration and unit testing
+
+### - Supertest
+Supertest allows for the mocking of a HTTP server through creating a temporary in-memory one. This way we can test out all REST API endpoints for validity.
+
 ## 🧱 API Architecture:
 
 The API logic is structured into three main folders. It is modelled after the MVC architecture. 
