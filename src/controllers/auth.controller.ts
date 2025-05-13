@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { db } from "../utils/db/index.ts";
-import user  from "../models/user.ts";
+import user  from "../models/db/user.ts";
 import { eq } from "drizzle-orm";
 import { errorResponse, successResponse } from "../utils/response/index.ts";
 import { handleCreateSession, handleDestroySession, handleGetSession } from "../utils/auth/sessions.ts";
