@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import {errorResponse, successResponse} from "../utils/response/index.ts";
 import { db } from "../utils/db/index.ts";
-import * as questionTable from "../models/question.ts";
+import * as questionTable from "../models/db/question.ts";
 import { eq } from "drizzle-orm";
 import { handleGetSession } from "../utils/auth/sessions.ts";
 
