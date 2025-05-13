@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { errorResponse, successResponse } from "../utils/response/index.ts";
-import comment from "../models/comment.ts";
+import comment from "../models/db/comment.ts";
 import forum from "../models/db/forum.ts";
 import { db } from "../utils/db/index.ts";
 import { eq, and } from "drizzle-orm";
