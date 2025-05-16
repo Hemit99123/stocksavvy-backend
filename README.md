@@ -67,5 +67,3 @@ Now create a PR (pull request) to merge that development branch to the main bran
 - feat: (for a new feature)
 - fix: (for a fix to a bug/feature not working)
 - chore: (for any other task that does not fit the other 2 categories)
-  
-### Happy Coding 🧑🏽‍💻
