@@ -18,4 +18,4 @@ export const errorResponse = (res: Response, error: unknown) => {
         message: "Unknown Internal Server Error",
       });
     }
-  };
+};
